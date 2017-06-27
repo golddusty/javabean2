@@ -1,0 +1,44 @@
+<project name="Titan Application examples" default="dist" basedir=".">
+	<target name="init">
+		<tstamp/>
+		<property name="build" value="../../build/ex13_1"/>
+		<property name="src" value="."/>
+		<property name="commonjsps" value="../common/jsp"/>
+		<property name="webpath" value="${build}/jsp"/>
+		<property environment="myenv"/>
+		<property name="j2eepath" value="${myenv.J2EE_HOME}/lib/j2ee.jar"/>
+		<property name="cloud-lib" value="${myenv.J2EE_HOME}/lib/cloudscape"/>
+		<property name="system-lib" value="${myenv.J2EE_HOME}/lib/system"/>
+		<!-- property name="cloudpath" value=".:${cloud-lib}/client.jar:${cloud-lib}/RmiJdbc.jar:${system-lib}/tools.jar:${system-lib}/cloudscape.jar" />
+      <property name="cloud-jvmargs" value="-ms16m -mx32m -Dij.connection.CloudscapeDB=jdbc:rmi://localhost:1099/jdbc:cloudscape:d:/j2sdkee1.3/bin/titanDB;create=true -Dcloudscape.system.home=${myenv.J2EE_HOME}/cloudscape" />
+      -->
+	</target>
+	<target name="prepare" depends="init">
+		<mkdir dir="${build}"/>
+	</target>
+	<target name="compile" depends="init">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build}/jsp"/>
+		<javac srcdir="${src}" destdir="${build}/" classpath="${j2eepath}"/>
+	</target>
+	<target name="dist" depends="compile">
+		<copy todir="${webpath}">
+			<fileset dir="${src}/jsp" includes="**/*.jsp,**/*.gif,**/*.jpg,**/*.bmp"/>
+		</copy>
+		<copy todir="${webpath}">
+			<fileset dir="${commonjsps}" includes="**/*.jsp,**/*.gif,**/*.jpg,**/*.bmp"/>
+		</copy>
+	</target>
+	<target name="redeploy">
+		<touch file="${basedir}"/>
+	</target>
+	<target name="clean" depends="init">
+		<delete dir="${build}"/>
+		<delete>
+			<fileset dir="${build}" includes="**/*.class"/>
+		</delete>
+		<delete>
+			<fileset dir="${src}" includes="**/*.jar"/>
+		</delete>
+	</target>
+</project>

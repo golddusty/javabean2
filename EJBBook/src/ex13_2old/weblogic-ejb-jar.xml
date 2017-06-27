@@ -1,0 +1,385 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE weblogic-ejb-jar PUBLIC 
+'-//BEA Systems, Inc.//DTD WebLogic 6.0.0 EJB//EN' 
+'http://www.bea.com/servers/wls600/dtd/weblogic-ejb-jar.dtd'>
+
+<weblogic-ejb-jar>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>ProcessPaymentEJB</ejb-name>
+
+    <stateless-session-descriptor>
+      <pool>
+        <max-beans-in-free-pool>100</max-beans-in-free-pool>
+      </pool>
+    </stateless-session-descriptor>
+
+    <reference-descriptor>
+      <resource-description>
+        <res-ref-name>jdbc/titanDB</res-ref-name>
+		<jndi-name>titan-dataSource</jndi-name>
+      </resource-description>
+    </reference-descriptor>
+
+    <jndi-name>ProcessPaymentHomeRemote</jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>TravelAgentEJB</ejb-name>
+
+    <stateful-session-descriptor>
+        <stateful-session-cache>
+            <max-beans-in-cache>100</max-beans-in-cache>
+            <idle-timeout-seconds>300</idle-timeout-seconds>
+        </stateful-session-cache>
+    </stateful-session-descriptor>
+
+    <reference-descriptor>
+        <resource-description>
+            <res-ref-name>jdbc/titanDB</res-ref-name>
+		    <jndi-name>titan-dataSource</jndi-name>
+        </resource-description>
+        <resource-description>
+            <res-ref-name>jms/TopicFactory</res-ref-name>
+		    <jndi-name>titan-TopicFactory</jndi-name>
+        </resource-description>
+        <resource-env-description>
+            <res-env-ref-name>jms/TicketTopic</res-env-ref-name>
+		    <jndi-name>titan-TicketTopic</jndi-name>
+        </resource-env-description>
+        <ejb-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/ProcessPaymentHomeRemote</ejb-ref-name>  
+            <jndi-name>ProcessPaymentHomeRemote</jndi-name>
+        </ejb-reference-description>
+        <ejb-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CustomerHomeRemote</ejb-ref-name>  
+            <jndi-name>CustomerHomeRemote</jndi-name>
+        </ejb-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CabinHomeLocal</ejb-ref-name>  
+            <jndi-name>CabinHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/ShipHomeLocal</ejb-ref-name>  
+            <jndi-name>ShipHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CruiseHomeLocal</ejb-ref-name>  
+            <jndi-name>CruiseHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/ReservationHomeLocal</ejb-ref-name>  
+            <jndi-name>ReservationHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+    </reference-descriptor>
+
+    <jndi-name>TravelAgentHomeRemote</jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>ReservationProcessorEJB</ejb-name>
+    <message-driven-descriptor>
+      <pool>
+        <max-beans-in-free-pool>50</max-beans-in-free-pool>
+        <initial-beans-in-free-pool>5</initial-beans-in-free-pool>
+      </pool>
+
+      <destination-jndi-name>titan-ReservationQueue</destination-jndi-name>
+    </message-driven-descriptor>
+
+    <reference-descriptor>
+        <resource-description>
+            <res-ref-name>jms/QueueFactory</res-ref-name>
+		    <jndi-name>titan-QueueFactory</jndi-name>
+        </resource-description>
+        <ejb-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/ProcessPaymentHomeRemote</ejb-ref-name>  
+            <jndi-name>ProcessPaymentHomeRemote</jndi-name>
+        </ejb-reference-description>
+        <ejb-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CustomerHomeRemote</ejb-ref-name>  
+            <jndi-name>CustomerHomeRemote</jndi-name>
+        </ejb-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CabinHomeLocal</ejb-ref-name>  
+            <jndi-name>CabinHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CruiseHomeLocal</ejb-ref-name>  
+            <jndi-name>CruiseHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/ReservationHomeLocal</ejb-ref-name>  
+            <jndi-name>ReservationHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+    </reference-descriptor>
+
+	<!-- This is required since the "everyone" role in the ejb-jar.xml file	is not specific enough -->
+	<run-as-identity-principal>guest</run-as-identity-principal>
+
+	<jndi-name>ReservationProcessor</jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CustomerEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <jndi-name>CustomerHomeRemote</jndi-name>
+    <local-jndi-name>CustomerHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>AddressEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>AddressHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CreditCardEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>CreditCardHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>PhoneEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>PhoneHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CruiseEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>CruiseHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>ShipEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>ShipHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>ReservationEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <reference-descriptor>
+        <ejb-local-reference-description>
+            <!-- Matches entry in ejb-jar.xml file -->
+            <ejb-ref-name>ejb/CustomerHomeLocal</ejb-ref-name>  
+            <jndi-name>CustomerHomeLocal</jndi-name>
+        </ejb-local-reference-description>
+    </reference-descriptor>
+
+    <local-jndi-name>ReservationHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CabinEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>CabinHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+
+	<!-- Map the normal weblogic users to the Employees role -->
+	<security-role-assignment>
+		<role-name>everyone</role-name>
+		<principal-name>guest</principal-name>
+		<principal-name>system</principal-name>
+	</security-role-assignment>
+
+</weblogic-ejb-jar>
+

@@ -1,0 +1,115 @@
+
+<%@ page import="com.titan.customer.*, com.titan.customer.Name" %>
+<%@ page import="javax.naming.*,javax.rmi.PortableRemoteObject,java.rmi.RemoteException,javax.ejb.*" %>
+
+<%@ include file="CommonFunctions.jsp" %>
+
+<%!
+  final String title = "Client_63 Example showing use of AddressDO dependent object";
+%>
+
+<html>
+<head>
+
+<title><%= title %></title>
+
+</head>
+
+<body bgcolor="#ffffff" LEFTMARGIN="10" RIGHTMARGIN="10"
+      link="#3366cc" vlink="#9999cc" alink="#0000cc">
+
+<H1><%= title %></H1>
+
+<%
+
+	try { 
+
+		// obtain CustomerHome
+		Context jndiContext = getInitialContext();
+		Object obj = jndiContext.lookup("CustomerHomeRemote");
+		CustomerHomeRemote home = (CustomerHomeRemote) 
+			javax.rmi.PortableRemoteObject.narrow(obj, CustomerHomeRemote.class);
+
+		// create a Customer
+		out.print("<H2>Creating Customer 1..</H2>");
+		Integer primaryKey = new Integer(1);
+		CustomerRemote customer = home.create(primaryKey);
+
+		out.print("<H2>Contents of CUSTOMER/ADDRESS tables</H2>");
+
+		String table = "CustomerBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		table = "AddressBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+		 
+
+		// create an address data object
+		out.print("<H2>Creating AddressDO data object..</H2>");
+		AddressDO address = new AddressDO(new Integer(10),"1010 Colorado",	
+									  "Austin", "TX", "78701");
+		
+		// set address in Customer bean
+		out.print("<H2>Setting Address in Customer 1...</H2>");
+		customer.setAddress(address);
+
+   		out.print("<H2>Contents of CUSTOMER/ADDRESS tables</H2>");
+
+		table = "CustomerBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		table = "AddressBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		out.print("<H2>Acquiring Address data object from Customer 1...</H2>");
+		address = customer.getAddress();
+
+		out.print("<H2>Customer 1 Address data:</H2>");
+		out.print(address.getStreet( )+"<br>");
+		out.print(address.getCity( )+","+
+						   address.getState()+" "+
+						   address.getZip()+"<br>");
+											
+							
+		// create a new address
+		out.print("<H2>Creating new AddressDO data object..</H2>");
+		address = new AddressDO(new Integer(20),"1600 Pennsylvania Avenue NW",	
+								"DC", "WA", "20500");
+							  
+		// change customer's address
+		out.print("<H2>Setting new Address in Customer 1...</H2>");
+		customer.setAddress(address);
+
+		out.print("<H2>Contents of CUSTOMER/ADDRESS tables</H2>");
+
+		table = "CustomerBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		table = "AddressBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		address = customer.getAddress();
+		out.print("<H2>Customer 1 Address data:</H2>");
+		out.print(address.getStreet( )+"<br>");
+		out.print(address.getCity( )+","+
+						   address.getState()+" "+
+						   address.getZip()+"<br>");
+			
+		// remove Customer to clean up
+		out.print("<H2>Removing Customer 1...</H2>");
+		customer.remove();
+
+		out.print("<H2>Contents of CUSTOMER/ADDRESS tables</H2>");
+
+		table = "CustomerBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+		table = "AddressBeanTable";
+		%><%@ include file="ViewTable.jsp" %><%		
+
+%>
+
+<%@ include file="CatchBlocks.jsp" %>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<project name="EJBBookSource" default="dist" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property file="../common.properties"/>
+  <property name="src" value="." />
+  <property name="BEAN_NAME" value="titanejb" />
+  <property name="applications" value="${WEBLOGIC_HOME}/config/${DOMAIN}/applications" />
+  <property name="ejbdist" value="${applications}/${APPLICATION}" />
+  <property name="jspdist" value="${applications}/${APPLICATION}/webapp" />
+
+  <path id="class.path">
+    <pathelement path="${basedir}" />
+    <pathelement location="${JAVA_HOME}/lib/tools.jar" />
+    <pathelement location="${WEBLOGIC_HOME}/lib/weblogic.jar" />
+  </path>
+
+  <path id="class.path.ejbjar">
+    <pathelement location="${JAVA_HOME}/lib/tools.jar" />
+    <pathelement location="${WEBLOGIC_HOME}/lib/weblogic.jar" />
+  </path>
+
+  <target name="compile">
+    <!-- Compile the java code from ${src} into same directory -->
+    <javac srcdir="${src}" destdir="${basedir}">
+		<classpath refid="class.path" />
+    </javac>
+  </target>
+
+  <target name="ejbjar" depends="compile">
+	<delete dir="${src}/ejbcgen"/>
+	<ejbjar srcdir="${src}"
+            descriptordir="."
+            basejarname="${BEAN_NAME}">
+      <include name="ejb-jar.xml"/>
+      <exclude name="weblogic-ejb-jar.xml"/>
+      <classpath refid="class.path.ejbjar" />
+      <weblogic destdir="${src}" />
+      <support dir="${src}">						<!-- Include dependent classes in jar -->
+            <include name="**/*.class"/>			<!-- ejbjar task doesn't understand locals yet, include everything -->
+			<exclude name="**/clients/*.class"/>
+      </support>
+    </ejbjar> 
+  </target>
+
+  <target name="dist" depends="compile,ejbjar">
+    <copy file="${BEAN_NAME}.jar" todir="${ejbdist}" />
+	<copy todir="${jspdist}"><fileset dir="${src}/jsp" includes="**/*.jsp,**/*.gif,**/*.jpg,**/*.bmp"/></copy>
+  </target>
+
+  <target name="redeploy">
+    <touch file="${ejbdist}/META-INF/REDEPLOY" />
+  </target>
+
+  <target name="clean">
+	<delete dir="${src}/ejbcgen"/>
+    <delete><fileset dir="${src}" includes="**/*.class" /></delete>
+    <delete><fileset dir="${src}" includes="**/*.jar" /></delete>
+  </target>
+
+</project>
+  

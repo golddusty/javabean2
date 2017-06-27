@@ -1,0 +1,52 @@
+package com.titan.clients;					
+
+import com.titan.cabin.CabinHomeRemote;		
+import com.titan.cabin.CabinRemote;			
+
+import javax.naming.InitialContext;
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.ejb.EJBMetaData;
+import javax.rmi.PortableRemoteObject;		
+import java.rmi.RemoteException;
+import java.util.Properties;
+
+/**
+ * Example of EJB meta data and getting the home interface from the meta data.
+ * 
+ */
+public class Client_52 {
+
+    public static void main(String [] args) {
+        try {
+			Context jndiContext = getInitialContext();
+
+			Object ref = jndiContext.lookup("CabinHome");
+			CabinHomeRemote c_home = (CabinHomeRemote)
+				PortableRemoteObject.narrow(ref, CabinHomeRemote.class);
+
+			EJBMetaData meta = c_home.getEJBMetaData();
+
+			System.out.println(meta.getHomeInterfaceClass().getName());
+			System.out.println(meta.getRemoteInterfaceClass().getName());
+			System.out.println(meta.getPrimaryKeyClass().getName());
+			System.out.println(meta.isSession());
+
+			Class primKeyType = meta.getPrimaryKeyClass();
+			if (primKeyType.getName().equals("java.lang.Integer")) {
+				Integer pk = new Integer(1);
+				Object ref2 = meta.getEJBHome();
+				CabinHomeRemote c_home2 = (CabinHomeRemote)
+					PortableRemoteObject.narrow(ref2,CabinHomeRemote.class);
+				CabinRemote cabin = c_home2.findByPrimaryKey(pk);
+				System.out.println(cabin.getName());
+			}
+        
+        } catch(java.rmi.RemoteException re){re.printStackTrace();}
+          catch(Throwable t){t.printStackTrace();}
+  }
+  static public Context getInitialContext() throws Exception {
+    return new InitialContext();
+  }
+}
+

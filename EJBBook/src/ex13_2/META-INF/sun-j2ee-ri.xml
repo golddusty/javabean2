@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE j2ee-ri-specific-information PUBLIC '-//Sun Microsystems Inc.//DTD J2EE Reference Implementation 1.3//EN' 'http://localhost:8000/sun-j2ee-ri_1_3.dtd'>
+
+<j2ee-ri-specific-information>
+  <rolemapping>
+    <role name="serverUserRole">
+      <principals>
+        <principal>
+          <name>scott</name>
+        </principal>
+      </principals>
+    </role>
+    <role name="everyone">
+      <principals>
+        <principal>
+          <name>j2ee</name>
+        </principal>
+        <principal>
+          <name>client</name>
+        </principal>
+        <principal>
+          <name>guest</name>
+        </principal>
+        <principal>
+          <name>scott</name>
+        </principal>
+      </principals>
+      <groups>
+        <group name="staff" />
+        <group name="mgr" />
+        <group name="guest" />
+        <group name="eng" />
+      </groups>
+    </role>
+    <role name="eng">
+      <principals>
+        <principal>
+          <name>scott</name>
+        </principal>
+      </principals>
+      <groups>
+        <group name="eng" />
+      </groups>
+    </role>
+  </rolemapping>
+  <web>
+    <module-name>Titan13_2Web.war</module-name>
+    <context-root>Titan13_2</context-root>
+    <ejb-ref>
+      <ejb-ref-name>TravelAgentHomeRemote</ejb-ref-name>
+      <jndi-name>TravelAgentHomeRemote</jndi-name>
+    </ejb-ref>
+    <ejb-ref>
+      <ejb-ref-name>CustomerHomeRemote</ejb-ref-name>
+      <jndi-name>CustomerHomeRemote</jndi-name>
+    </ejb-ref>
+  </web>
+  <enterprise-beans>
+    <module-name>Titan13_2EJBs.jar</module-name>
+    <unique-id>0</unique-id>
+    <ejb>
+      <ejb-name>ReservationProcessorBean</ejb-name>
+      <jndi-name>titan-ReservationQueue</jndi-name>
+      <ior-security-config>
+        <transport-config>
+          <integrity>supported</integrity>
+          <confidentiality>supported</confidentiality>
+          <establish-trust-in-target>supported</establish-trust-in-target>
+          <establish-trust-in-client>supported</establish-trust-in-client>
+        </transport-config>
+        <as-context>
+          <auth-method>username_password</auth-method>
+          <realm>default</realm>
+          <required>false</required>
+        </as-context>
+        <sas-context>
+          <caller-propagation>supported</caller-propagation>
+        </sas-context>
+      </ior-security-config>
+      <principal>
+        <name>scott</name>
+      </principal>
+      <resource-ref>
+        <res-ref-name>jms/QueueFactory</res-ref-name>
+        <jndi-name>titan-QueueFactory</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CustomerHomeRemote</ejb-ref-name>
+        <jndi-name>CustomerHomeRemote</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/ProcessPaymentHomeRemote</ejb-ref-name>
+        <jndi-name>ProcessPaymentHomeRemote</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CruiseHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/CruiseBean3</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CabinHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/CabinBean1</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/ReservationHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/ReservationBean7</jndi-name>
+      </ejb-ref>
+      <resource-env-ref>
+        <resource-env-ref-name>jms/TicketQueue</resource-env-ref-name>
+        <jndi-name>titan-TicketQueue</jndi-name>
+      </resource-env-ref>
+      <gen-classes />
+      <mdb-connection-factory>titan-QueueFactory</mdb-connection-factory>
+    </ejb>
+    <ejb>
+      <ejb-name>CreditCardBean</ejb-name>
+      <jndi-name>CreditCardHomeLocal</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/TitanUID</res-ref-name>
+        <jndi-name>jdbc/TitanUID</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CreditCardBeanTable" SET "_customer_id" = ?  , "creditOrganization" = ?  , "expirationDate" = ?  , "nameOnCard" = ?  , "number" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_customer_id" , "creditOrganization" , "expirationDate" , "nameOnCard" , "number" FROM "CreditCardBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CreditCardBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CreditCardBeanTable" ( "_customer_id" , "creditOrganization" , "expirationDate" , "id" , "nameOnCard" , "number" ) VALUES (  ?  ,  ?  ,  ?  ,  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CreditCardBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "CreditCardBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CreditCardBeanTable" ("_customer_id" INTEGER , "creditOrganization" VARCHAR(255) , "expirationDate" DATE , "id" INTEGER , "nameOnCard" VARCHAR(255) , "number" VARCHAR(255), CONSTRAINT "pk_CreditCardBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>CabinBean</ejb-name>
+      <jndi-name>CabinHomeLocal</jndi-name>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CabinBeanTable" SET "bedCount" = ?  , "deckLevel" = ?  , "name" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "bedCount" , "deckLevel" , "name" FROM "CabinBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CabinBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CabinBeanTable" ( "bedCount" , "deckLevel" , "id" , "name" ) VALUES (  ?  ,  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CabinBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "CabinBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CabinBeanTable" ("bedCount" INTEGER NOT NULL , "deckLevel" INTEGER NOT NULL , "id" INTEGER , "name" VARCHAR(255), CONSTRAINT "pk_CabinBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>ShipBean</ejb-name>
+      <jndi-name>ShipHomeLocal</jndi-name>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "ShipBeanTable" SET "name" = ?  , "tonnage" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "name" , "tonnage" FROM "ShipBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "ShipBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "ShipBeanTable" ( "id" , "name" , "tonnage" ) VALUES (  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "ShipBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "ShipBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "ShipBeanTable" ("id" INTEGER , "name" VARCHAR(255) , "tonnage" DOUBLE PRECISION NOT NULL, CONSTRAINT "pk_ShipBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>CruiseBean</ejb-name>
+      <jndi-name>CruiseHomeLocal</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/titanUID</res-ref-name>
+        <jndi-name>jdbc/TitanUID</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CruiseBeanTable" SET "name" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "name" FROM "CruiseBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CruiseBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CruiseBeanTable" ( "id" , "name" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CruiseBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "CruiseBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CruiseBeanTable" ("id" INTEGER , "name" VARCHAR(255), CONSTRAINT "pk_CruiseBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>TravelAgentBean</ejb-name>
+      <jndi-name>TravelAgentHomeRemote</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/Titan</res-ref-name>
+        <jndi-name>jdbc/Titan</jndi-name>
+      </resource-ref>
+      <resource-ref>
+        <res-ref-name>jms/TopicFactory</res-ref-name>
+        <jndi-name>titan-TopicFactory</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CustomerHomeRemote</ejb-ref-name>
+        <jndi-name>CustomerHomeRemote</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/ShipHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/ShipBean9</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/ReservationHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/ReservationBean7</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CruiseHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/CruiseBean3</jndi-name>
+      </ejb-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CabinHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/CabinBean1</jndi-name>
+      </ejb-ref>
+      <resource-env-ref>
+        <resource-env-ref-name>jms/TicketTopic</resource-env-ref-name>
+        <jndi-name>titan-TicketTopic</jndi-name>
+      </resource-env-ref>
+      <gen-classes />
+    </ejb>
+    <ejb>
+      <ejb-name>AddressBean</ejb-name>
+      <jndi-name>AddressHomeLocal</jndi-name>
+      <ior-security-config>
+        <transport-config>
+          <integrity>supported</integrity>
+          <confidentiality>supported</confidentiality>
+          <establish-trust-in-target>supported</establish-trust-in-target>
+          <establish-trust-in-client>supported</establish-trust-in-client>
+        </transport-config>
+        <as-context>
+          <auth-method>username_password</auth-method>
+          <realm>default</realm>
+          <required>false</required>
+        </as-context>
+        <sas-context>
+          <caller-propagation>supported</caller-propagation>
+        </sas-context>
+      </ior-security-config>
+      <resource-ref>
+        <res-ref-name>jdbc/TitanUID</res-ref-name>
+        <jndi-name>jdbc/TitanUID</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "AddressBeanTable" SET "__reverse_homeAddress_id" = ?  , "city" = ?  , "state" = ?  , "street" = ?  , "zip" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "__reverse_homeAddress_id" , "city" , "state" , "street" , "zip" FROM "AddressBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "AddressBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "AddressBeanTable" ( "__reverse_homeAddress_id" , "city" , "id" , "state" , "street" , "zip" ) VALUES (  ?  ,  ?  ,  ?  ,  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "AddressBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "AddressBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "AddressBeanTable" ("__reverse_homeAddress_id" INTEGER , "city" VARCHAR(255) , "id" INTEGER , "state" VARCHAR(255) , "street" VARCHAR(255) , "zip" VARCHAR(255), CONSTRAINT "pk_AddressBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>ReservationBean</ejb-name>
+      <jndi-name>ReservationHomeLocal</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/TitanUID</res-ref-name>
+        <jndi-name>jdbc/TitanUID</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <ejb-ref>
+        <ejb-ref-name>ejb/CustomerHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/CustomerBean4</jndi-name>
+      </ejb-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "ReservationBeanTable" SET "amountPaid" = ?  , "date" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "amountPaid" , "date" FROM "ReservationBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "ReservationBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "ReservationBeanTable" ( "amountPaid" , "date" , "id" ) VALUES (  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "ReservationBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "ReservationBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "ReservationBeanTable" ("amountPaid" DOUBLE PRECISION NOT NULL , "date" DATE , "id" INTEGER, CONSTRAINT "pk_ReservationBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>PhoneBean</ejb-name>
+      <jndi-name>PhoneHomeLocal</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/TitanUID</res-ref-name>
+        <jndi-name>jdbc/TitanUID</jndi-name>
+        <default-resource-principal>
+          <name>scott</name>
+          <password>tiger</password>
+        </default-resource-principal>
+      </resource-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "PhoneBeanTable" SET "number" = ?  , "type" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "number" , "type" FROM "PhoneBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "PhoneBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "PhoneBeanTable" ( "id" , "number" , "type" ) VALUES (  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "PhoneBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "PhoneBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "PhoneBeanTable" ("id" INTEGER , "number" VARCHAR(255) , "type" TINYINT NOT NULL, CONSTRAINT "pk_PhoneBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <ejb>
+      <ejb-name>ProcessPaymentBean</ejb-name>
+      <jndi-name>ProcessPaymentHomeRemote</jndi-name>
+      <resource-ref>
+        <res-ref-name>jdbc/Titan</res-ref-name>
+        <jndi-name>jdbc/Titan</jndi-name>
+      </resource-ref>
+      <gen-classes />
+    </ejb>
+    <ejb>
+      <ejb-name>CustomerBean</ejb-name>
+      <jndi-name>CustomerHomeRemote</jndi-name>
+      <ejb-ref>
+        <ejb-ref-name>PhoneHomeLocal</ejb-ref-name>
+        <jndi-name>localejbs/Titan13_2App/PhoneBean5</jndi-name>
+      </ejb-ref>
+      <gen-classes />
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CustomerBeanTable" SET "_creditCard_id" = ?  , "_homeAddress_id" = ?  , "firstName" = ?  , "hasGoodCredit" = ?  , "lastName" = ?  WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_creditCard_id" , "_homeAddress_id" , "firstName" , "hasGoodCredit" , "lastName" FROM "CustomerBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CustomerBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CustomerBeanTable" ( "_creditCard_id" , "_homeAddress_id" , "firstName" , "hasGoodCredit" , "id" , "lastName" ) VALUES (  ?  ,  ?  ,  ?  ,  ?  ,  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CustomerBeanTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "id" FROM "CustomerBeanTable" WHERE "id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CustomerBeanTable" ("_creditCard_id" INTEGER , "_homeAddress_id" INTEGER , "firstName" VARCHAR(255) , "hasGoodCredit" BOOLEAN NOT NULL , "id" INTEGER , "lastName" VARCHAR(255), CONSTRAINT "pk_CustomerBeanTabl" PRIMARY KEY ("id") )</sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+    </ejb>
+    <join-object>
+      <name>com.titan.reservation.CustomerBean_reservations_ReservationBean_customers</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql> </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_ReservationBean_id" FROM "CustomerBean_reservations_ReservationBean_customersTable" WHERE "_CustomerBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CustomerBean_reservations_ReservationBean_customersTable" WHERE "_CustomerBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT  *  FROM "CustomerBean_reservations_ReservationBean_customersTable" WHERE "_CustomerBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_CustomerBean_id" , "_ReservationBean_id" FROM "CustomerBean_reservations_ReservationBean_customersTable" WHERE "_CustomerBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CustomerBean_reservations_ReservationBean_customersTable" ( "_CustomerBean_id" , "_ReservationBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CustomerBean_reservations_ReservationBean_customersTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CustomerBean_reservations_ReservationBean_customersTable" ("_CustomerBean_id" INTEGER , "_ReservationBean_id" INTEGER, CONSTRAINT "pk_CustomerBean_reservations_ReservationBean_customersTabl" PRIMARY KEY ("_CustomerBean_id" , "_ReservationBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_CustomerBean_id" FROM "CustomerBean_reservations_ReservationBean_customersTable" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>CustomerBean</name>
+        <field>reservations</field>
+      </source>
+      <sink>
+        <name>ReservationBean</name>
+        <field>customers</field>
+      </sink>
+    </join-object>
+    <join-object>
+      <name>com.titan.reservation.ReservationBean_cabins_CabinBean_</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql> </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_CabinBean_id" FROM "ReservationBean_cabins_CabinBean_Table" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "ReservationBean_cabins_CabinBean_Table" WHERE "_CabinBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT  *  FROM "ReservationBean_cabins_CabinBean_Table" WHERE "_CabinBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_CabinBean_id" , "_ReservationBean_id" FROM "ReservationBean_cabins_CabinBean_Table" WHERE "_CabinBean_id" = ?  AND "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "ReservationBean_cabins_CabinBean_Table" ( "_CabinBean_id" , "_ReservationBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "ReservationBean_cabins_CabinBean_Table"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "ReservationBean_cabins_CabinBean_Table" ("_CabinBean_id" INTEGER , "_ReservationBean_id" INTEGER, CONSTRAINT "pk_ReservationBean_cabins_CabinBean_Tabl" PRIMARY KEY ("_CabinBean_id" , "_ReservationBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_ReservationBean_id" FROM "ReservationBean_cabins_CabinBean_Table" WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>ReservationBean</name>
+        <field>cabins</field>
+      </source>
+      <sink>
+        <name>CabinBean</name>
+        <field></field>
+      </sink>
+    </join-object>
+    <join-object>
+      <name>com.titan.ship.CruiseBean_ship_ShipBean_</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CruiseBean_ship_ShipBean_Table" SET "_ShipBean_id" = ?  WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_ShipBean_id" FROM "CruiseBean_ship_ShipBean_Table" WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CruiseBean_ship_ShipBean_Table" WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_ShipBean_id" FROM "CruiseBean_ship_ShipBean_Table" WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_CruiseBean_id" FROM "CruiseBean_ship_ShipBean_Table" WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CruiseBean_ship_ShipBean_Table" ( "_CruiseBean_id" , "_ShipBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CruiseBean_ship_ShipBean_Table"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CruiseBean_ship_ShipBean_Table" ("_CruiseBean_id" INTEGER , "_ShipBean_id" INTEGER, CONSTRAINT "pk_CruiseBean_ship_ShipBean_Tabl" PRIMARY KEY ("_CruiseBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_CruiseBean_id" FROM "CruiseBean_ship_ShipBean_Table" WHERE "_ShipBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>CruiseBean</name>
+        <field>ship</field>
+      </source>
+      <sink>
+        <name>ShipBean</name>
+        <field></field>
+      </sink>
+    </join-object>
+    <join-object>
+      <name>com.titan.reservation.CruiseBean_reservations_ReservationBean_cruise</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CruiseBean_reservations_ReservationBean_cruiseTable" SET "_CruiseBean_id" = ?  WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_ReservationBean_id" FROM "CruiseBean_reservations_ReservationBean_cruiseTable" WHERE "_CruiseBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CruiseBean_reservations_ReservationBean_cruiseTable" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_CruiseBean_id" FROM "CruiseBean_reservations_ReservationBean_cruiseTable" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_ReservationBean_id" FROM "CruiseBean_reservations_ReservationBean_cruiseTable" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CruiseBean_reservations_ReservationBean_cruiseTable" ( "_CruiseBean_id" , "_ReservationBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CruiseBean_reservations_ReservationBean_cruiseTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CruiseBean_reservations_ReservationBean_cruiseTable" ("_CruiseBean_id" INTEGER , "_ReservationBean_id" INTEGER, CONSTRAINT "pk_CruiseBean_reservations_ReservationBean_cruiseTabl" PRIMARY KEY ("_ReservationBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_CruiseBean_id" FROM "CruiseBean_reservations_ReservationBean_cruiseTable" WHERE "_ReservationBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>CruiseBean</name>
+        <field>reservations</field>
+      </source>
+      <sink>
+        <name>ReservationBean</name>
+        <field>cruise</field>
+      </sink>
+    </join-object>
+    <join-object>
+      <name>com.titan.customer.CustomerBean_phoneNumbers_PhoneBean_</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "CustomerBean_phoneNumbers_PhoneBean_Table" SET "_CustomerBean_id" = ?  WHERE "_PhoneBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_PhoneBean_id" FROM "CustomerBean_phoneNumbers_PhoneBean_Table" WHERE "_CustomerBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "CustomerBean_phoneNumbers_PhoneBean_Table" WHERE "_PhoneBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_CustomerBean_id" FROM "CustomerBean_phoneNumbers_PhoneBean_Table" WHERE "_PhoneBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_PhoneBean_id" FROM "CustomerBean_phoneNumbers_PhoneBean_Table" WHERE "_PhoneBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "CustomerBean_phoneNumbers_PhoneBean_Table" ( "_CustomerBean_id" , "_PhoneBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "CustomerBean_phoneNumbers_PhoneBean_Table"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "CustomerBean_phoneNumbers_PhoneBean_Table" ("_CustomerBean_id" INTEGER , "_PhoneBean_id" INTEGER, CONSTRAINT "pk_CustomerBean_phoneNumbers_PhoneBean_Tabl" PRIMARY KEY ("_PhoneBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_CustomerBean_id" FROM "CustomerBean_phoneNumbers_PhoneBean_Table" WHERE "_PhoneBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>CustomerBean</name>
+        <field>phoneNumbers</field>
+      </source>
+      <sink>
+        <name>PhoneBean</name>
+        <field></field>
+      </sink>
+    </join-object>
+    <join-object>
+      <name>com.titan.ship.ShipBean_cabins_CabinBean_ship</name>
+      <ejb20-cmp>
+        <sql-statement>
+          <operation>storeRow</operation>
+          <sql>UPDATE "ShipBean_cabins_CabinBean_shipTable" SET "_ShipBean_id" = ?  WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySourceKey</operation>
+          <sql>SELECT "_CabinBean_id" FROM "ShipBean_cabins_CabinBean_shipTable" WHERE "_ShipBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteRow</operation>
+          <sql>DELETE FROM "ShipBean_cabins_CabinBean_shipTable" WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>loadRow</operation>
+          <sql>SELECT "_ShipBean_id" FROM "ShipBean_cabins_CabinBean_shipTable" WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findByPrimaryKey</operation>
+          <sql>SELECT "_CabinBean_id" FROM "ShipBean_cabins_CabinBean_shipTable" WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createRow</operation>
+          <sql>INSERT INTO "ShipBean_cabins_CabinBean_shipTable" ( "_CabinBean_id" , "_ShipBean_id" ) VALUES (  ?  ,  ?  )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>deleteTable</operation>
+          <sql>DROP TABLE "ShipBean_cabins_CabinBean_shipTable"</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>createTable</operation>
+          <sql>CREATE TABLE "ShipBean_cabins_CabinBean_shipTable" ("_CabinBean_id" INTEGER , "_ShipBean_id" INTEGER, CONSTRAINT "pk_ShipBean_cabins_CabinBean_shipTabl" PRIMARY KEY ("_CabinBean_id") )</sql>
+        </sql-statement>
+        <sql-statement>
+          <operation>findBySinkKey</operation>
+          <sql>SELECT "_ShipBean_id" FROM "ShipBean_cabins_CabinBean_shipTable" WHERE "_CabinBean_id" = ? </sql>
+        </sql-statement>
+        <create-table-deploy>true</create-table-deploy>
+        <delete-table-undeploy>true</delete-table-undeploy>
+      </ejb20-cmp>
+      <source>
+        <name>ShipBean</name>
+        <field>cabins</field>
+      </source>
+      <sink>
+        <name>CabinBean</name>
+        <field>ship</field>
+      </sink>
+    </join-object>
+    <cmpresource>
+      <ds-jndi-name>jdbc/Titan</ds-jndi-name>
+      <default-resource-principal>
+        <name>scott</name>
+        <password>tiger</password>
+      </default-resource-principal>
+    </cmpresource>
+  </enterprise-beans>
+</j2ee-ri-specific-information>
+

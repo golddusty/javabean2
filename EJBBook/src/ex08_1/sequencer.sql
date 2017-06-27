@@ -1,0 +1,9 @@
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Phone', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Address', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('CreditCard', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Reservation', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Cruise', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Ship', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Cabin', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Customer', 10);
+insert into "SequenceTable" ("SequenceName","CurrentValue" ) values ('Payment', 10);

@@ -1,0 +1,177 @@
+<!DOCTYPE weblogic-rdbms-jar PUBLIC 
+ '-//BEA Systems, Inc.//DTD WebLogic 6.0.0 EJB RDBMS Persistence//EN'
+ 'http://www.bea.com/servers/wls600/dtd/weblogic-rdbms20-persistence-600.dtd'>
+
+<weblogic-rdbms-jar>
+
+  <weblogic-rdbms-bean>
+
+	<ejb-name>CustomerEJB</ejb-name>
+
+    <data-source-name>titan-dataSource</data-source-name>
+    <table-name>CUSTOMER</table-name>
+
+    <field-map>
+      <cmp-field>id</cmp-field>
+      <dbms-column>ID</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>lastName</cmp-field>
+      <dbms-column>LAST_NAME</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>firstName</cmp-field>
+      <dbms-column>FIRST_NAME</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>hasGoodCredit</cmp-field>
+      <dbms-column>HAS_GOOD_CREDIT</dbms-column>
+    </field-map>
+
+  </weblogic-rdbms-bean>
+
+  <weblogic-rdbms-bean>
+
+	<ejb-name>AddressEJB</ejb-name>
+
+    <data-source-name>titan-dataSource</data-source-name>
+    <table-name>ADDRESS</table-name>
+
+    <field-map>
+      <cmp-field>id</cmp-field>
+      <dbms-column>ID</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>street</cmp-field>
+      <dbms-column>STREET</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>city</cmp-field>
+      <dbms-column>CITY</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>state</cmp-field>
+      <dbms-column>STATE</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>zip</cmp-field>
+      <dbms-column>ZIP</dbms-column>
+    </field-map>
+
+	<!-- Automatically generate the value of ID in the database on inserts using sequence table -->
+    <automatic-key-generation>
+      <generator-type>NAMED_SEQUENCE_TABLE</generator-type>
+      <generator-name>ADDRESS_SEQUENCE</generator-name>
+      <key-cache-size>10</key-cache-size>
+    </automatic-key-generation>
+
+  </weblogic-rdbms-bean>
+
+  <weblogic-rdbms-bean>
+
+	<ejb-name>CreditCardEJB</ejb-name>
+
+    <data-source-name>titan-dataSource</data-source-name>
+    <table-name>CREDIT_CARD</table-name>
+
+    <field-map>
+      <cmp-field>id</cmp-field>
+      <dbms-column>ID</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>expirationDate</cmp-field>
+      <dbms-column>EXP_DATE</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>number</cmp-field>
+      <dbms-column>NUMBER</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>nameOnCard</cmp-field>
+      <dbms-column>NAME</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>creditOrganization</cmp-field>
+      <dbms-column>ORGANIZATION</dbms-column>
+    </field-map>
+
+	<!-- Automatically generate the value of ID in the database on inserts using sequence table -->
+    <automatic-key-generation>
+      <generator-type>NAMED_SEQUENCE_TABLE</generator-type>
+      <generator-name>CREDIT_CARD_SEQUENCE</generator-name>
+      <key-cache-size>10</key-cache-size>
+    </automatic-key-generation>
+
+  </weblogic-rdbms-bean>
+
+
+  <weblogic-rdbms-bean>
+
+	<ejb-name>PhoneEJB</ejb-name>
+
+    <data-source-name>titan-dataSource</data-source-name>
+    <table-name>PHONE</table-name>
+
+    <field-map>
+      <cmp-field>id</cmp-field>
+      <dbms-column>ID</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>number</cmp-field>
+      <dbms-column>NUMBER</dbms-column>
+    </field-map>
+    <field-map>
+      <cmp-field>type</cmp-field>
+      <dbms-column>TYPE</dbms-column>
+    </field-map>
+
+	<!-- Automatically generate the value of ID in the database on inserts using sequence table -->
+    <automatic-key-generation>
+      <generator-type>NAMED_SEQUENCE_TABLE</generator-type>
+      <generator-name>PHONE_SEQUENCE</generator-name>
+      <key-cache-size>10</key-cache-size>
+    </automatic-key-generation>
+
+  </weblogic-rdbms-bean>
+
+
+  <weblogic-rdbms-relation>
+
+	<relation-name>Customer-HomeAddress</relation-name>
+      <weblogic-relationship-role>
+        <relationship-role-name>Customer-has-a-Address</relationship-role-name>
+          <column-map>
+            <foreign-key-column>ADDRESS_ID</foreign-key-column>
+            <key-column>ID</key-column>
+          </column-map>
+      </weblogic-relationship-role>
+
+  </weblogic-rdbms-relation>
+
+  <weblogic-rdbms-relation>
+
+	<relation-name>Customer-CreditCard</relation-name>
+      <weblogic-relationship-role>
+        <relationship-role-name>CreditCard-belongs-to-Customer</relationship-role-name>
+          <column-map>
+            <foreign-key-column>CUSTOMER_ID</foreign-key-column>
+            <key-column>ID</key-column>
+          </column-map>
+      </weblogic-relationship-role>
+
+  </weblogic-rdbms-relation>
+
+  <weblogic-rdbms-relation>
+
+	<relation-name>Customer-Phones</relation-name>
+      <weblogic-relationship-role>
+        <relationship-role-name>Phone-belongs-to-Customer</relationship-role-name>
+          <column-map>
+            <foreign-key-column>CUSTOMER_ID</foreign-key-column>
+            <key-column>ID</key-column>
+          </column-map>
+      </weblogic-relationship-role>
+
+  </weblogic-rdbms-relation>
+
+</weblogic-rdbms-jar>

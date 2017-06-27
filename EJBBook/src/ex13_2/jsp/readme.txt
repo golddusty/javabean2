@@ -1,0 +1,1 @@
+This exercise does not contain JSP clients.

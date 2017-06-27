@@ -1,0 +1,53 @@
+
+<%@ page import="com.titan.travelagent.*" %>
+<%@ page import="javax.naming.*,javax.rmi.PortableRemoteObject,java.rmi.RemoteException" %>
+
+<%@ include file="CommonFunctions.jsp" %>
+
+<%!
+
+  public static int SHIP_ID = 1;
+  public static int BED_COUNT = 3;
+
+  final String title = "Client_43 Example Showing Use of TravelAgent EJB listCabins()";
+%>
+
+<html>
+<head>
+
+<title><%= title %></title>
+
+</head>
+
+<body bgcolor="#ffffff" LEFTMARGIN="10" RIGHTMARGIN="10"
+      link="#3366cc" vlink="#9999cc" alink="#0000cc">
+
+<H1><%= title %></H1>
+
+<H2>Here is a useful list of cabins:</H2>
+
+<%
+
+	try {
+	   Context jndiContext = getInitialContext();
+	   
+	   Object ref = (TravelAgentHomeRemote)								
+		   jndiContext.lookup("TravelAgentHome");
+	   TravelAgentHomeRemote home = (TravelAgentHomeRemote)
+		   PortableRemoteObject.narrow(ref,TravelAgentHomeRemote.class);	
+	
+	   TravelAgentRemote travelAgent = home.create();
+	
+	   // Get a list of all cabins on ship 1 with a bed count of 3.
+	   String list [] = travelAgent.listCabins(SHIP_ID,BED_COUNT);
+	
+	   for(int i = 0; i < list.length; i++){
+		  out.print(list[i]+"<br>");
+	   }
+	
+%>
+
+<%@ include file="CatchBlocks.jsp" %>
+
+</body>
+</html>

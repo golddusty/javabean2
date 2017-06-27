@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE weblogic-ejb-jar PUBLIC 
+'-//BEA Systems, Inc.//DTD WebLogic 6.0.0 EJB//EN' 
+'http://www.bea.com/servers/wls600/dtd/weblogic-ejb-jar.dtd'>
+
+<weblogic-ejb-jar>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CustomerEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>CustomerHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>AddressEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>AddressHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>CreditCardEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>CreditCardHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+  <weblogic-enterprise-bean>
+
+    <ejb-name>PhoneEJB</ejb-name>
+
+    <entity-descriptor>
+
+      <entity-cache>    
+		<max-beans-in-cache>100</max-beans-in-cache>
+      </entity-cache>    
+
+      <persistence>
+		<persistence-type>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		  <type-storage>META-INF/weblogic-cmp-rdbms-jar.xml</type-storage>
+		</persistence-type>
+		<persistence-use>
+		  <type-identifier>WebLogic_CMP_RDBMS</type-identifier>
+		  <type-version>6.0</type-version>
+		</persistence-use>
+      </persistence>
+
+    </entity-descriptor>
+
+    <local-jndi-name>PhoneHomeLocal</local-jndi-name>
+
+  </weblogic-enterprise-bean>
+
+	<!-- Map the normal weblogic users to the Employees role -->
+	<security-role-assignment>
+		<role-name>Employees</role-name>
+		<principal-name>guest</principal-name>
+		<principal-name>system</principal-name>
+	</security-role-assignment>
+
+</weblogic-ejb-jar>
+

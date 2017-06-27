@@ -1,0 +1,15 @@
+package com.titan.cabin;
+
+import javax.ejb.EJBException;
+import javax.ejb.CreateException;
+import javax.ejb.FinderException;
+
+public interface CabinHomeLocal extends javax.ejb.EJBLocalHome {
+
+    public CabinLocal create(Integer id)
+        throws CreateException, EJBException;
+
+    public CabinLocal findByPrimaryKey(Integer pk)
+        throws FinderException, EJBException;
+
+}

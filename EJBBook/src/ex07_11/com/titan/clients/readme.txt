@@ -1,0 +1,1 @@
+Client programs for this exercise are JSP pages.

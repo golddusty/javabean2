@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app PUBLIC '-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
+
+<web-app>
+  <display-name>Titan72Web</display-name>
+  <servlet>
+    <servlet-name>Client_75</servlet-name>
+    <display-name>Client_75</display-name>
+    <jsp-file>/Client_75.jsp</jsp-file>
+  </servlet>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <ejb-local-ref>
+    <ejb-ref-name>ShipHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.ship.ShipHomeLocal</local-home>
+    <local>com.titan.ship.ShipLocal</local>
+    <ejb-link>ShipBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>CruiseHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.cruise.CruiseHomeLocal</local-home>
+    <local>com.titan.cruise.CruiseLocal</local>
+    <ejb-link>CruiseBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>ReservationHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.reservation.ReservationHomeLocal</local-home>
+    <local>com.titan.reservation.ReservationLocal</local>
+    <ejb-link>ReservationBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>CustomerHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.customer.CustomerHomeLocal</local-home>
+    <local>com.titan.customer.CustomerLocal</local>
+    <ejb-link>CustomerBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>AddressHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.address.AddressHomeLocal</local-home>
+    <local>com.titan.address.AddressLocal</local>
+    <ejb-link>AddressBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>CreditCardHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.customer.CreditCardHomeLocal</local-home>
+    <local>com.titan.customer.CreditCardLocal</local>
+    <ejb-link>CreditCardBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>PhoneHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.phone.PhoneHomeLocal</local-home>
+    <local>com.titan.phone.PhoneLocal</local>
+    <ejb-link>PhoneBean</ejb-link>
+  </ejb-local-ref>
+  <ejb-local-ref>
+    <ejb-ref-name>CabinHomeLocal</ejb-ref-name>
+    <ejb-ref-type>Entity</ejb-ref-type>
+    <local-home>com.titan.cabin.CabinHomeLocal</local-home>
+    <local>com.titan.cabin.CabinLocal</local>
+    <ejb-link>CabinBean</ejb-link>
+  </ejb-local-ref>
+</web-app>
+

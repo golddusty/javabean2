@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<attributes version="1.0">
+   <fileobject name="AddressBean.java">
+      <attr name="class_dependency_javax.ejb.EntityBean" stringvalue="AddressBean"/>
+   </fileobject>
+   <fileobject name="CustomerBean.java">
+      <attr name="class_dependency_javax.ejb.EntityBean" stringvalue="CustomerBean"/>
+   </fileobject>
+</attributes>
